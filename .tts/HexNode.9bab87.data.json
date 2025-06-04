@@ -1,0 +1,83 @@
+{
+  "GUID": "9bab87",
+  "Name": "Checker_white",
+  "Transform": {
+    "posX": -104.972565,
+    "posY": 4.10737658,
+    "posZ": 4.02501965,
+    "rotX": 359.965,
+    "rotY": 180.016983,
+    "rotZ": 0.006657265,
+    "scaleX": 0.25,
+    "scaleY": 0.25,
+    "scaleZ": 0.25
+  },
+  "Nickname": "HexNode",
+  "Description": "",
+  "GMNotes": "",
+  "Memo": "{\"coordinates\":{\"x\":-105,\"z\":4},\"coordinatesWorld\":{\"x\":-104.972564697266,\"z\":4.02499771118164},\"neighbours\":[],\"platoonCount\":0}",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 0.818818748,
+    "g": 0.798845053,
+    "b": 0.798845053
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "\r\nfunction initMemoTable()\r\n    \r\n    local hexMemoTable = getMemoTable() or {}\r\n\r\n    -- The world coordinates of the hexnode\r\n    if (hexMemoTable[\"coordinatesWorld\"] == nil) then\r\n        hexMemoTable[\"coordinatesWorld\"] = { x = 0, z = 0 }\r\n    end\r\n    -- A truncated version of the world coordinates used for identification and display purposes.\r\n    if (hexMemoTable[\"coordinates\"] == nil) then\r\n        hexMemoTable[\"coordinates\"] = { x = 0, z = 0 }\r\n    end\r\n\r\n    if (hexMemoTable[\"platoonCount\"] == nil) then\r\n        hexMemoTable[\"platoonCount\"] = 0\r\n    end\r\n\r\n    if (hexMemoTable[\"neighbours\"] == nil) then\r\n        hexMemoTable[\"neighbours\"] = {}\r\n    end\r\n\r\n    if(hexMemoTable[\"hasFullNeighbours\"] == nil) then\r\n        hasFullNeighbours = false\r\n    end\r\n    \r\n    setMemoTable(hexMemoTable)\r\n    setHexCoordinates()\r\n    setHexCoordinatesWorld()\r\nend\r\n\r\n-- Getters and Setters --\r\n\r\nfunction getMemoTable()\r\n    if (self.memo == nil or self.memo == \"\") then \r\n        return {\r\n            empty = \"No memo object found\"\r\n        } \r\n    end\r\n    return JSON.decode(self.memo)\r\nend\r\n\r\nfunction setMemoTable(memoTable)\r\n    self.memo = JSON.encode(memoTable)\r\nend\r\n\r\nfunction getHexCoordinatesWorld()\r\n    local memoTable = getMemoTable()\r\n    return memoTable.coordinatesWorld\r\nend\r\n\r\nfunction setHexCoordinatesWorld()\r\n    local memoTable = getMemoTable()\r\n    local position = self.getPosition()\r\n    \r\n    local coordinatesWorld = {\r\n        x = position.x,\r\n        z = position.z  -- TTS uses z as the vertical axis\r\n    }\r\n\r\n    memoTable.coordinatesWorld = coordinatesWorld\r\n    setMemoTable(memoTable)\r\nend\r\n\r\nfunction getHexCoordinates()\r\n    local memoTable = getMemoTable()\r\n    return memoTable.coordinates\r\nend\r\n\r\nfunction setHexCoordinates()\r\n    local memoTable = getMemoTable()\r\n    local position = self.getPosition()\r\n    \r\n    local coordinates = {\r\n        x = math.floor(position.x),\r\n        z = math.floor(position.z)  -- TTS uses z as the vertical axis\r\n    }\r\n\r\n    memoTable.coordinates = coordinates\r\n    setMemoTable(memoTable)\r\nend\r\n\r\nfunction getNeighbours()\r\n    local memoTable = getMemoTable()\r\n    local neighbours = memoTable.neighbours\r\n\r\n    return neighbours\r\nend\r\n\r\nfunction getHasFullNeighbours()\r\n    local memoTable = getMemoTable()\r\n    return memoTable.hasFullNeighbours\r\nend\r\n\r\nfunction updateHasFullNeighbours()\r\n    local memoTable = getMemoTable()\r\n    local neighbours = memoTable.neighbours\r\n    \r\n    if (#neighbours < 6) then\r\n        memoTable.hasFullNeighbours = false\r\n    elseif (#neighbours == 6) then\r\n        memoTable.hasFullNeighbours = true\r\n    end\r\nend\r\n\r\nfunction addNeighbour(neighbourNode)\r\n    local memoTable = getMemoTable()\r\n    local neighbours = memoTable.\r\n    updateHasFullNeighbours()\r\nend\r\n\r\n-- Complex functionality --\r\n\r\nfunction HexCoordinateLabel() end\r\nfunction spawn_HexCoordinateLabel()\r\n    local labelText = self.getName()\r\n    local coordinates = getHexCoordinates()\r\n    local label = tostring(coordinates.x or \"?\") .. \",\" .. tostring(coordinates.z or \"?\")\r\n\r\n    self.createButton({\r\n        click_function = \"HexCoordinateLabel\",\r\n        function_owner = self,\r\n        label          = label,\r\n        position       = {0, 0.3, -5},\r\n        rotation       = {0, 0, 0},\r\n        color          = {1, 1, 1, 1}, \r\n        width          = 0,\r\n        height         = 0,\r\n        font_size      = 500, \r\n    })\r\nend\r\n\r\n-- Utility --\r\n\r\nfunction printMemoTable()\r\n\r\n    local memo = getMemoTable()\r\n    print(\"-=Memo table for: \"..self.getGUID().. \"=-\")\r\n\r\n    local function printTable(tbl, indent)\r\n        indent = indent or \"\"\r\n        for k, v in pairs(tbl) do\r\n            local line = indent..\"[\"..tostring(k)..\"] = \"\r\n            if type(v) == \"table\" then\r\n                print(line..\"{\")\r\n                printTable(v, indent..\"  \")\r\n                print(indent..\"}\")\r\n            else\r\n                print(line..tostring(v))\r\n            end\r\n        end\r\n    end\r\n    printTable(memo)\r\n    print(\" \")\r\nend\r\n\r\nfunction getDistanceTo(hexNode)\r\n    local selfPosition = getHexCoordinatesWorld()\r\n    local targetPosition = hexNode.call(\"getHexCoordinatesWorld\")\r\n\r\n    local difference_x = selfPosition.x - targetPosition.x\r\n    local difference_z = selfPosition.z - targetPosition.z\r\n\r\n    local distance = math.sqrt(difference_x*difference_x + difference_z * difference_z)\r\n    return distance\r\nend\r\n\r\nfunction compareTo(hexNode)\r\n    return self.getGUID() == hexNode.getGUID()\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": "",
+  "AttachedSnapPoints": [
+    {
+      "Position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "Position": {
+        "x": 2.38798228e-16,
+        "y": 0,
+        "z": 3.9
+      }
+    },
+    {
+      "Position": {
+        "x": -3.9,
+        "y": 0,
+        "z": 4.77596457e-16
+      }
+    },
+    {
+      "Position": {
+        "x": -7.16394738e-16,
+        "y": 0,
+        "z": -3.9
+      }
+    },
+    {
+      "Position": {
+        "x": 3.9,
+        "y": 0,
+        "z": -9.551929e-16
+      }
+    }
+  ]
+}

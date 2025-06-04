@@ -1,0 +1,14 @@
+<Panel id="hudPanel" rectAlignment="Lowerright" width="300" height="100" position=" -500 0 0">
+    <HorizontalLayout spacing="5">
+        <Button id="button1" text="Spawn Labels" onClick="RunProcess01" />
+        <Button id="button2" text="init Memo" onClick="RunProcess02" />
+        <Button id="button3" text="Check hex Dupes" onClick="RunProcess03" />
+    </HorizontalLayout>
+</Panel>
+<Panel id="hudPanel" rectAlignment="Lowerleft" width="300" height="100" position=" -500 0 0">
+    <HorizontalLayout spacing="5">
+        <Button id="button4" text="Update labels" onClick="RunProcess04" />
+        <Button id="button5" text="Print Memos" onClick="RunProcess05" />
+        <Button id="button6" text="06" onClick="RunProcess06" />
+    </HorizontalLayout>
+</Panel>

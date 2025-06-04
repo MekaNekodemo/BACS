@@ -1,0 +1,45 @@
+{
+  "GUID": "3fffbf",
+  "Name": "BlockRectangle",
+  "Transform": {
+    "posX": -114.065834,
+    "posY": 4.608432,
+    "posZ": 4.02526236,
+    "rotX": 0.00665875431,
+    "rotY": 90.01033,
+    "rotZ": 0.035044983,
+    "scaleX": 1,
+    "scaleY": 1,
+    "scaleZ": 1
+  },
+  "Nickname": "Updater Engines",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 0.8235294,
+    "g": 0,
+    "b": 0.789854348
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": false,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": true,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": false,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "LuaScript": "function initMemoTable()\r\n    print(\"Initializing new memo table\")\r\n    local hexMemoTable = {\r\n        coordinates = {},\r\n        platoonCount = 0\r\n    }\r\n\r\n    if (self.memo == nil) then\r\n        self.setMemoTable(hexMemoTable)\r\n    end\r\nend\r\n\r\n--\r\n-- Getters and Setters ->\r\n--\r\n\r\nfunction getHexCoordinates()\r\n    local memoTable = self.getMemoTable()\r\n    return memoTable.coordinates\r\nend\r\n\r\nfunction setHexCoordinates(coordinates)\r\n    local memoTable = self.getMemoTable()\r\n    memoTable.coordinates = coordinates\r\n    self.setMemoTable(memoTable)\r\nend\r\n\r\nfunction getMemoTable()\r\n    local memo = self.memo\r\n    \r\n    if (memo == nil or memo == \"\") then \r\n        return nil \r\n    end\r\n    \r\n    return JSON.decode(memo)\r\nend\r\n\r\nfunction setMemoTable(table)\r\n    self.memo = JSON.encode(table)\r\nend\r\n\r\n--\r\n-- Complex functionality ->\r\n--\r\n\r\nfunction ButtonAsLabel() end\r\nfunction spawn_HexCoordinateLabel()\r\n\r\n    local labelText = self.getName()\r\n    local coordinates = self.getHexCoordinates()\r\n\r\n    self.createButton({\r\n    click_function = \"ButtonAsLabel\",\r\n    function_owner = self,\r\n    label          = coordinates,\r\n    position       = {0, 0.3, -5},\r\n    rotation       = {0, 0, 0},\r\n    color          = {1, 1, 1, 1}, \r\n    width          = 0,\r\n    height         = 0,\r\n    font_size      = 500, \r\n    })\r\nend",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}
