@@ -1,0 +1,51 @@
+{
+  "GUID": "29258b",
+  "Name": "Custom_Board",
+  "Transform": {
+    "posX": -111.984337,
+    "posY": 3.17097163,
+    "posZ": -12.9592352,
+    "rotX": 0.00665019,
+    "rotY": 89.99991,
+    "rotZ": 0.03497449,
+    "scaleX": 3,
+    "scaleY": 1,
+    "scaleZ": 2.5
+  },
+  "Nickname": "",
+  "Description": "",
+  "GMNotes": "",
+  "AltLookAngle": {
+    "x": 0,
+    "y": 0,
+    "z": 0
+  },
+  "ColorDiffuse": {
+    "r": 0.7867647,
+    "g": 0.7867647,
+    "b": 0.7867647
+  },
+  "LayoutGroupSortIndex": 0,
+  "Value": 0,
+  "Locked": true,
+  "Grid": true,
+  "Snap": true,
+  "IgnoreFoW": false,
+  "MeasureMovement": false,
+  "DragSelectable": true,
+  "Autoraise": false,
+  "Sticky": true,
+  "Tooltip": true,
+  "GridProjection": true,
+  "HideWhenFaceDown": false,
+  "Hands": false,
+  "CustomImage": {
+    "ImageURL": "file:///C:\\Users\\Marti\\Desktop\\Alt History BA Campaign System\\istockphoto-1441015286-612x612.jpg",
+    "ImageSecondaryURL": "",
+    "ImageScalar": 1,
+    "WidthScale": 1.71428573
+  },
+  "LuaScript": "",
+  "LuaScriptState": "",
+  "XmlUI": ""
+}

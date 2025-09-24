@@ -2,11 +2,12 @@ local HEXNODE_DISTANCE_THRESHOLD = 3.04 -- the distance of the TTS ruler tool is
 
 
 function onLoad()
+    -- syncs ->
     syncHexNodeScripts()
 end
 
 --
--- process buttons ->
+-- runners ->
 --
 
 function RunProcess01()
@@ -79,6 +80,11 @@ end
 -- HexNode transforming ->
 --
 
+-- Wrapper to call initMemoTable() cleanly on a HexNode object
+function initMemoTable(HexNode)
+    hexNode.call("initMemoTable")
+end
+
 function spawn_Hitbox(HexNode)
     local HexNodePosition = HexNode.getPosition()
     local HexNodeName = HexNode.getName()
@@ -112,6 +118,8 @@ function updateHexCoordinateLabels(hexNodes)
         node.call("spawn_HexCoordinateLabel")
     end
 end
+
+
 
 function setNodeNeighbourNetwork()
 
@@ -173,12 +181,14 @@ function fillNodeWithNeighbours(mainPointer, pointerHexNode, hexNodes)
     end
 end
 
+
 --
 -- Get collections ->
 --
 
 function getAllObjects_Named(givenName)
 
+    -- print("Running getAllObjects_Named " .. givenName .. "")
     local allObjects = getAllObjects()
     local listOfObjects = {}
 
@@ -189,6 +199,7 @@ function getAllObjects_Named(givenName)
     end
    
     if (#listOfObjects ~= 0) then
+        -- print(" "..#listOfObjects.. " Objects named " ..givenName.. " found!")
         return listOfObjects
     end
 end
@@ -198,7 +209,7 @@ end
 --
 
 function deleteObjectsOnTag(tagName)
-
+    -- print("Running deleteNamedScriptingZones()")
     for _, obj in ipairs(getAllObjects()) do
         if obj.tag == tagName then
                 print("Deleting object tagged -> "  ..obj.tag.. " ")
@@ -208,11 +219,11 @@ function deleteObjectsOnTag(tagName)
 end
 
 function deleteNamedObjects(objectName)
-
+    -- print("Running deleteNamedObjects()")
     local scriptZones = Functions.call("getAllObjects_UserNamed", "Zone_HexNode_Master")
 
     for _, scriptZone in ipairs(scriptZones) do
-
+        -- print("Deleting object named -> " ..scriptZone.getName().. "")
         scriptZone.destruct()
     end
 end
@@ -221,7 +232,7 @@ function clearButton(object, buttonName)
     local buttons = object.getButtons()
 
     if (buttons) then
-        for i = #buttons, 1, -1 do 
+        for i = #buttons, 1, -1 do  -- Fjern baglæns for sikkerhed
             local button = buttons[i]
             if ((button) and (button.click_function == buttonName)) then
                 object.removeButton(i-1)
@@ -236,6 +247,7 @@ end
 --
 
 function syncHexNodeScripts()
+    -- print("Running: syncHexNodeScripts")
     local masterObject = getObjectFromGUID("d0feff")
     UpdateObjectScript_FromMaster(masterObject)
 end
@@ -248,6 +260,8 @@ function UpdateObjectScript_FromMaster(masterObject)
     for _, subject in ipairs(subjects) do
         local masterObject = getObjectFromGUID(masterObjGUID)
         local updatedCode = masterObject.getLuaScript()
+
+        -- print("Updating subject -> " ..subject.getName().. " " .. subject.getGUID())
         
         subject.setLuaScript(updatedCode)
         
